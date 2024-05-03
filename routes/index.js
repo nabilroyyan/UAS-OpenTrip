@@ -15,5 +15,8 @@ router.get("/register", function (req, res, next) {
 router.get("/paket", function (req, res, next) {
   res.render("paket");
 });
+router.get("/detailpaket", function (req, res, next) {
+  res.render("paket/detailpaket");
+});
 
 module.exports = router;
