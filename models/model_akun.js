@@ -31,7 +31,7 @@ class ModelAkun {
         if (err) {
           reject(err);
         } else {
-          resolve(rows[0]); // Ambil data pertama karena email seharusnya unik
+          resolve(rows[0]);
         }
       });
     });
@@ -43,7 +43,7 @@ class ModelAkun {
         if (err) {
           reject(err);
         } else {
-          resolve(result.insertId); // Mengembalikan ID dari data yang baru saja dimasukkan
+          resolve(result.insertId);
         }
       });
     });
@@ -55,7 +55,7 @@ class ModelAkun {
         if (err) {
           reject(err);
         } else {
-          resolve(result.affectedRows); // Mengembalikan jumlah baris yang terpengaruh oleh perintah UPDATE
+          resolve(result.affectedRows);
         }
       });
     });
@@ -67,7 +67,7 @@ class ModelAkun {
         if (err) {
           reject(err);
         } else {
-          resolve(result.affectedRows); // Mengembalikan jumlah baris yang terpengaruh oleh perintah DELETE
+          resolve(result.affectedRows);
         }
       });
     });
