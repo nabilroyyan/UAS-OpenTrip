@@ -16,6 +16,22 @@
             height: 100vh;
         }
 
+        .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container {
+            margin-right: 20px;
+        }
+
+        .image-container img {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+
         .container {
             width: 300px;
             padding: 40px;
@@ -97,27 +113,30 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Register</h2>
-        <form action="/saveusers" method="post">
-            <div class="user-box">
-                <input type="text" name="username" required>
-                <label>Username</label>
+    <div class="wrapper">
+        <div class="container">
+            <img src="images/3d.png" alt="Register Image" height="100">
+            <h2>Register</h2>
+            <form action="/saveusers" method="post">
+                <div class="user-box">
+                    <input type="email" name="email" required>
+                    <label>Email</label>
+                </div>
+                <div class="user-box">
+                    <input type="password" name="password" required>
+                    <label>Password</label>
+                </div>
+                <div class="user-box">
+                    <input type="text" name="phone" required>
+                    <label>Phone Number</label>
+                </div>
+                <div class="btn-box">
+                    <button type="submit">Register</button>
+                </div>
+            </form>
+            <div class="login">
+                <a href="login">Already have an account? Sign in</a>
             </div>
-            <div class="user-box">
-                <input type="password" name="password" required>
-                <label>Password</label>
-            </div>
-            <div class="user-box">
-                <input type="text" name="phone" required>
-                <label>Phone Number</label>
-            </div>
-            <div class="btn-box">
-                <button type="submit">Register</button>
-            </div>
-        </form>
-        <div class="login">
-            <a href="login">Already have an account? Sign in</a>
         </div>
     </div>
 </body>
