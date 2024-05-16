@@ -17,5 +17,11 @@ router.get("/tambahwisata", function (req, res, next) {
 router.get("/wisata", function (req, res, next) {
   res.render("admin/wisata");
 });
+router.get("/tambahpesan", function (req, res, next) {
+  res.render("admin/tambahpesan");
+});
+router.get("/pesan", function (req, res, next) {
+  res.render("admin/pesan");
+});
 
 module.exports = router;
