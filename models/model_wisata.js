@@ -19,7 +19,7 @@ class ModelWisata {
         if (err) {
           reject(err);
         } else {
-          resolve(rows[0]); // Ambil data pertama karena id_wisata adalah primary key
+          resolve(rows); // Ambil data pertama karena id_wisata adalah primary key
         }
       });
     });
