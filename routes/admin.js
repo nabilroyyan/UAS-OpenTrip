@@ -2,13 +2,19 @@ var express = require("express");
 var router = express.Router();
 const bcrypt = require("bcrypt");
 const ModelWisata = require('../models/model_wisata');
+const ModelPaket = require('../models/model_paket');
 
 
 router.get("/", function (req, res, next) {
   res.render("admin/index");
 });
-router.get("/paket", function (req, res, next) {
+router.get("/paket",async function (req, res, next) {
+  let data = await ModelPaket.getAll();
   res.render("admin/paket");
+});
+router.get("/wisata",async function (req, res, next) {
+  let data = await ModelWisata.getAll();
+  res.render('admin/wisata',{ data: data });
 });
 router.get("/tambahpaket", async function (req, res, next) {
   try {
