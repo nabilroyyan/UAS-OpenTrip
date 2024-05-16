@@ -1,6 +1,6 @@
 const connection = require('../config/db');
 
-class ModelAkun {
+class Model_Akun {
   static async getAll() {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM akun ORDER BY id_akun DESC', (err, rows) => {
@@ -27,7 +27,7 @@ class ModelAkun {
 
   static async getByEmail(email) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM akun WHERE email = ?', email, (err, rows) => {
+      connection.query('SELECT * FROM akun WHERE email = ?', [email],function (err, rows){
         if (err) {
           reject(err);
         } else {
@@ -38,7 +38,7 @@ class ModelAkun {
   }
 
   static async create(data) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) =>{
       connection.query('INSERT INTO akun SET ?', data, (err, result) => {
         if (err) {
           reject(err);
@@ -74,4 +74,4 @@ class ModelAkun {
   }
 }
 
-module.exports = ModelAkun;
+module.exports = Model_Akun;
