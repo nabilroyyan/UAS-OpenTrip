@@ -11,5 +11,11 @@ router.get("/paket", function (req, res, next) {
 router.get("/tambahpaket", function (req, res, next) {
   res.render("admin/tambahpaket");
 });
+router.get("/tambahwisata", function (req, res, next) {
+  res.render("admin/tambahwisata");
+});
+router.get("/wisata", function (req, res, next) {
+  res.render("admin/wisata");
+});
 
 module.exports = router;
