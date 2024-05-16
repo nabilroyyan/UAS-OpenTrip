@@ -71,16 +71,6 @@ router.post("/log", async (req, res) => {
       if (isPasswordMatch) {
         req.session.userId = data[0].id_akun;
         if (data[0].level == 1) {
-<<<<<<< HEAD
-          req.flash('success', 'Berhasil login');
-          res.redirect('/admin');
-
-        } else if (data[0].level == 2) {
-          req.flash('success', 'Berhasil login');
-          res.redirect('/users');
-        } else {
-          res.redirect('/login');
-=======
           res.redirect("/admin");
           req.flash("success", "Berhasil login");
           console.error(error);
@@ -91,7 +81,6 @@ router.post("/log", async (req, res) => {
         } else {
           res.redirect("/login");
           console.error(error);
->>>>>>> 8899a6f275d91d0349e4132d7088fbc8d3a1f294
         }
       } else {
         req.flash("error", "Email atau password salah");
