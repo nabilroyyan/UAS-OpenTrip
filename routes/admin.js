@@ -18,6 +18,12 @@ router.get("/tambahpaket", async function (req, res, next) {
     res.status(500).json('Internal server error');
   }
 });
+router.get("/tambahwisata", function (req, res, next) {
+  res.render("admin/tambahwisata");
+});
+router.get("/wisata", function (req, res, next) {
+  res.render("admin/wisata");
+});
 
 
 module.exports = router;
