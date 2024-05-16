@@ -3,9 +3,7 @@ var router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-// const Model_users = require('../model/model_peminjam.js');
 const model_wisata = require('../models/model_wisata.js');
-
 
 
 const storage = multer.diskStorage({
@@ -98,13 +96,13 @@ router.post('/update/(:id)', upload.single("gambar"), async function(req,res,nex
 
 router.get('/delete/(:id)',async function(req,res,next){
     let id = req.params.id;
-    let rows = await model_wisata.getId(id);
+    let rows = await model_wisata.getById(id);
     const namaFileLama = rows[0].gambar;
     if(namaFileLama){
         const pathFileLama = path.join(__dirname, '../public/images/upload', namaFileLama);
         fs.unlinkSync(pathFileLama);
     }
-    await model_wisata.delete(id);
+    await model_wisata.remove(id);
     req.flash('success','Berhasil menghapus data');
     res.redirect('/wisata')
 });
