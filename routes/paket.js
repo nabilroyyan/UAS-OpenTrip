@@ -11,6 +11,15 @@ router.get('/', async function (req, res, next) {
     res.status(500).json('Internal server error');
   }
 });
+router.get('/tambahpaket', async function (req, res, next) {
+  try {
+    let wisataList = await ModelWisata.getAll(); // Ambil data wisata dari database
+    res.render('admin/tambahpaket', { idWisataList: wisataList }); // Render halaman tambahpaket.ejs dengan data wisata
+  } catch (error) {
+    console.error(error);
+    res.status(500).json('Internal server error');
+  }
+});
 
 router.get('/:id', async function (req, res, next) {
   try {
