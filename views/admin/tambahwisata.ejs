@@ -61,22 +61,22 @@
             <form  action="/wisata/store" method="POST" enctype="multipart/form-data">
               <div class="mb-3">
                 <label class="form-label" for="nama">Nama Wisata</label>
-                <input type="text" class="form-control" id="nama" placeholder="Nama Wisata" required />
+                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Wisata" required />
                 <div class="valid-feedback">Looks good!</div>
               </div>
               <div class="mb-3">
                 <label class="form-label" for="alamat">Alamat</label>
-                <input type="text" class="form-control" id="alamat" placeholder="Alamat" required />
+                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Alamat" required />
                 <div class="valid-feedback">Looks good!</div>
               </div>
               <div class="mb-3">
                 <label class="form-label" for="deskripsi">Deskripsi</label>
-                <textarea class="form-control" id="deskripsi" placeholder="Deskripsi" required></textarea>
+                <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi" required></textarea>
                 <div class="valid-feedback">Looks good!</div>
               </div>
               <div class="mb-3">
                 <label class="form-label" for="gambar">Gambar</label>
-                <input type="file" class="form-control" id="gambar" required />
+                <input type="file" class="form-control" id="gambar" name="gambar" required />
                 <div class="valid-feedback">Looks good!</div>
               </div>
               <button class="btn btn-primary" type="submit">Submit form</button>
