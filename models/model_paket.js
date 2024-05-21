@@ -19,7 +19,7 @@ class ModelPaket {
         if (err) {
           reject(err);
         } else {
-          resolve(rows[0]); // Ambil data pertama karena id_paket adalah primary key
+          resolve(rows[0]); 
         }
       });
     });
