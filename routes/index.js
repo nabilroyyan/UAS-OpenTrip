@@ -16,9 +16,7 @@ router.get("/register", function (req, res) {
 router.get("/login", function (req, res) {
   res.render("auth/login");
 });
-router.get("/paket", function (req, res) {
-  res.render("paket");
-});
+
 router.get("/detailpaket", function (req, res, next) {
   res.render("paket/detailpaket");
 });

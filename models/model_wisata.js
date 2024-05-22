@@ -1,6 +1,6 @@
 const connection = require('../config/db');
 
-class ModelWisata {
+class model_wisata {
   static async getAll() {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM wisata', (err, rows) => {
@@ -62,4 +62,4 @@ class ModelWisata {
   }
 }
 
-module.exports = ModelWisata;
+module.exports = model_wisata;

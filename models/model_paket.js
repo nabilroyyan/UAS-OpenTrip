@@ -1,6 +1,6 @@
 const connection = require('../config/db');
 
-class ModelPaket {
+class model_paket {
   static async getAll() {
     return new Promise((resolve, reject) => {
       connection.query('SELECT * FROM paket', (err, rows) => {
@@ -15,7 +15,7 @@ class ModelPaket {
 
   static async getById(id) {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM paket WHERE id_paket = ?', id, (err, rows) => {
+      connection.query('SELECT * FROM paket WHERE id_paket = ?', [id], (err, rows) => {
         if (err) {
           reject(err);
         } else {
@@ -31,12 +31,12 @@ class ModelPaket {
         if (err) {
           reject(err);
         } else {
-          resolve(result.insertId); // Mengembalikan ID dari data yang baru saja dimasukkan
+          resolve(result.insertId);
         }
       });
     });
   }
-
+  
   static async update(id, data) {
     return new Promise((resolve, reject) => {
       connection.query('UPDATE paket SET ? WHERE id_paket = ?', [data, id], (err, result) => {
@@ -51,7 +51,7 @@ class ModelPaket {
 
   static async remove(id) {
     return new Promise((resolve, reject) => {
-      connection.query('DELETE FROM paket WHERE id_paket = ?', id, (err, result) => {
+      connection.query('DELETE FROM paket WHERE id_paket = ?', [id], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -62,4 +62,4 @@ class ModelPaket {
   }
 }
 
-module.exports = ModelPaket;
+module.exports = model_paket;

@@ -1,68 +1,74 @@
 var express = require('express');
 var router = express.Router();
-const bodyParser = require('body-parser'); // Import body-parser
-const ModelPaket = require('../models/model_paket');
-const ModelWisata = require('../models/model_wisata.js');
+const model_paket = require('../models/model_paket.js');
+const model_wisata = require('../models/model_wisata.js');
 
-router.use(bodyParser.urlencoded({ extended: true }));
+router.get('/',async function(req,res,next){
+    let rows = await model_paket.getAll();
+    res.render('admin/paket',{
+        data:rows
+    });
+})
 
-router.get("/", async function (req, res, next) {
+router.get('/create', async function(req, res, next) {
     try {
-        let paket = await ModelPaket.getAll();
-        res.render("admin/paket", {
-            data: paket,
+        // Mendapatkan data barang dan data peminjam
+        let rows2 = await model_wisata.getALL();
+
+        // Merender halaman pembuatan paket dengan data yang diperoleh
+        res.render('paket/create', {
+            id_wisata: '',
+            nama_paket: '',
+            deskripsi: '',
+            harga: '',
+            data_wisata: rows2,
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json('Internal server error');
+        // Tangani kesalahan
+        console.error('Error saat mendapatkan data barang atau data peminjam:', error);
+        req.flash('error', 'Gagal memuat halaman pembuatan paket');
+        res.redirect('/paket'); // Redirect ke halaman lain atau lakukan hal lain sesuai kebutuhan
     }
 });
 
 
-router.get('/create', async function(req, res, next){
-  let rows = await model_paket.getAll();
- res.render('paket/create',{
-  data: rows,
- })
-})
-router.post('/store', async function(req, res, next){
-  try {
-      let { nama_paket, deskripsi, harga, id_wisata } = req.body;
-      let data = {
-          nama_paket,
-          deskripsi,
-          harga,
-          id_wisata
-      };
-      await ModelPaket.create(data);
-      req.flash('success', 'Berhasil menyimpan data');
-      res.redirect('/admin/paket'); 
-  } catch (error) {
-      console.error(error);
-      req.flash('error', 'Gagal menyimpan data');
-      res.redirect('/admin/paket');
-  }
+
+router.post('/store', async function(req, res, next) {
+    try {
+        let { id_wisata, nama_paket, deskripsi, harga } = req.body;
+        let Data = {
+            id_wisata,
+            nama_paket,
+            deskripsi,
+            harga,
+        }
+        await model_paket.create(Data);
+        req.flash('success', 'Berhasil menyimpan data');
+        res.redirect('/paket');
+    } catch (error) {
+        console.error('Error:', error);
+        req.flash('error', 'Gagal menyimpan data');
+        res.redirect('/paket');
+    }
 });
 
-
-
+ 
 router.get('/edit/:id', async function(req, res, next) {
     try {
         let id = req.params.id;
-        let paket = await ModelPaket.getById(id);
-        let wisataList = await ModelPaket.getAllWisata();
-        if (paket) {
-            res.render('paket/edit', {
-                data: paket,
-                idWisataList: wisataList
-            });
-        } else {
-            req.flash('error', 'Data paket tidak ditemukan');
-            res.redirect('/paket');
-        }
+        let rows = await model_paket.getById();
+        let rows2 = await model_wisata.getById();
+        res.render('paket/edit', {
+            id: id,
+            id_wisata: rows[0].id_wisata,
+            nama_paket: rows[0].nama_paket,
+            deskripsi: rows[0].deskripsi,
+            harga: rows[0].harga,
+            data_barang: rows2,
+        });
     } catch (error) {
-        console.error(error);
-        req.flash('error', 'Internal server error');
+        console.error('Error:', error);
+        req.flash('error', 'Gagal memuat halaman edit paket');
         res.redirect('/paket');
     }
 });
@@ -70,47 +76,30 @@ router.get('/edit/:id', async function(req, res, next) {
 router.post('/update/:id', async function(req, res, next) {
     try {
         let id = req.params.id;
-        let { nama_paket, deskripsi, harga, id_wisata } = req.body;
-        let data = {
+        let { id_wisata, nama_paket, deskripsi, harga } = req.body;
+        let Data = {
+            id_wisata,
             nama_paket,
             deskripsi,
             harga,
-            id_wisata
         };
-        let result = await ModelPaket.update(id, data);
-        if (result > 0) {
-            req.flash('success', 'Berhasil update data');
-        } else {
-            req.flash('error', 'Data paket tidak ditemukan');
-        }
+        await model_paket.update(id, Data);
+        req.flash('success', 'Berhasil update data');
         res.redirect('/paket');
     } catch (error) {
-        console.error(error);
-        req.flash('error', 'Internal server error');
+        console.error('Error:', error);
+        req.flash('error', 'Gagal menyimpan data');
         res.redirect('/paket');
     }
 });
 
-router.get('/delete/:id', async function(req, res, next) {
-    try {
-        let id = req.params.id;
-        let paket = await ModelPaket.getById(id);
-        if (paket) {
-            let result = await ModelPaket.remove(id);
-            if (result > 0) {
-                req.flash('success', 'Berhasil menghapus data');
-            } else {
-                req.flash('error', 'Data paket tidak ditemukan');
-            }
-        } else {
-            req.flash('error', 'Data paket tidak ditemukan');
-        }
-        res.redirect('/paket');
-    } catch (error) {
-        console.error(error);
-        req.flash('error', 'Internal server error');
-        res.redirect('/paket');
-    }
-});
+
+
+router.get('/delete/(:id)',async function(req,res,next){
+    let id = req.params.id;
+    await model_paket.remove(id);
+    req.flash('success','Berhasil menghapus data');
+    res.redirect('/paket')
+})
 
 module.exports = router;
