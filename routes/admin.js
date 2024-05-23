@@ -26,6 +26,23 @@ router.get("/wisata",async function (req, res, next) {
 router.get("/tambahwisata", function (req, res, next) {
   res.render("admin/tambahwisata");
 });
+router.get("/editwisata/(:id)", async function (req, res, next) {
+  try {
+    let id = req.params.id;
+    let rows = await model_wisata.getById(id);
+    res.render('admin/editwisata', {
+        data: rows,
+        id: rows[0].id_wisata,
+        nama: rows[0].nama,
+        alamat: rows[0].alamat, 
+        deskripsi: rows[0].deskripsi,
+        gambar: rows[0].gambar,
+    });
+} catch (error) {
+    res.redirect('/wisata');
+    console.error(error);
+}
+});
 
 router.get("/pesan", function (req, res, next) {
   res.render("admin/pesan");

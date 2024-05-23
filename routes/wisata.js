@@ -54,13 +54,13 @@ router.post('/store',upload.single("gambar"),  async function(req,res,next){
 router.get('/edit/:id', async function(req, res, next) {
     try {
         let id = req.params.id;
-        let rows = await model_wisata.getId(id);
-        res.render('wisata/edit', {
+        let rows = await model_wisata.getById(id);
+        res.render('admin/editwisata', {
             data: rows,
             id: rows[0].id_wisata,
-            nama: rows[0].Nama_Barang,
-            alamat: rows[0].Deskripsi,
-            deskripsi: rows[0].Kondisi,
+            nama: rows[0].nama,
+            alamat: rows[0].alamat, 
+            deskripsi: rows[0].deskripsi,
             gambar: rows[0].gambar,
         });
     } catch (error) {
@@ -73,14 +73,13 @@ router.get('/edit/:id', async function(req, res, next) {
 router.post('/update/(:id)', upload.single("gambar"), async function(req,res,next){
     let id = req.params.id;
     let filebaru = req.file ? req.file.filename : null;
-    let rows = await model_wisata.getId(id);
+    let rows = await model_wisata.getById(id);
     const namaFileLama = rows[0].gambar;
-    
     if(filebaru && namaFileLama){
         const pathFileLama = path.join(__dirname, '../public/images/upload', namaFileLama);
         fs.unlinkSync(pathFileLama);
     }
-        let {nama, alamat,deskripsi, } = req.body;
+        let {nama, alamat,deskripsi } = req.body;
         let gambar = filebaru || namaFileLama;
         let Data = {
             nama,

@@ -39,7 +39,6 @@
 
     <!-- Icons css -->
     <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   </head>
 
   <body>
@@ -58,44 +57,30 @@
       <!-- ============================================================== -->
       <div class="content-page">
         <div class="content">
-          <div class="d-flex">
-            <a type="button" href="/admin/tambahwisata" class="btn btn-secondary ms-auto">Tambah</a>
-          </div>
           <div class="container-fluid">
-            <table class="table table-striped table-centered mb-0">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Gambar</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Alamat</th>
-                    <th scope="col">Deskripsi</th>
-                    <th scope="col" colspan="2">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% for(var i = 0; i < data.length; i++){ %>
-                    <tr>
-                      <th scope="row"><%= (i+1) %></th>
-                      <td>
-                        <img src="/images/upload/<%= data[i].gambar %>" alt="<%= data[i].gambar %>" height="150" width="250">
-                      </td>                          
-                      <td><%= data[i].nama %></td>
-                      <td><%= data[i].alamat %></td>
-                      <td><%= data[i].deskripsi %></td> 
-                      <td class="table-action">
-                        <a href="/admin/editwisata/<%= data[i].id_wisata %>" class="action-icon">
-                          <i class="mdi mdi-pencil"></i
-                        ></a>
-                        <a href="/wisata/delete/<%= data[i].id_wisata  %>" class="action-icon">
-                          <i class="mdi mdi-delete"></i
-                        ></a>
-                      </td>
-                    </tr>
-                    </tr>
-                  <% } %>
-                </tbody>
-            </table>
+            <form  action="/wisata/update/<%= data[0].id_wisata %>" method="POST" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label class="form-label" for="nama">Nama Wisata</label>
+                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Wisata" value="<%= nama %>" required />
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="alamat">Alamat</label>
+                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Alamat" required />
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="deskripsi">Deskripsi</label>
+                <textarea class="form-control" id="deskripsi" name="deskripsi" placeholder="Deskripsi" required></textarea>
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="gambar">Gambar</label>
+                <input type="file" class="form-control" id="gambar" name="gambar" required />
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+              <button class="btn btn-primary" type="submit">Submit form</button>
+            </form>
           </div>
         </div>
       </div>
