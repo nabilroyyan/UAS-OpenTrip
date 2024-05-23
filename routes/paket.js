@@ -1,48 +1,46 @@
 var express = require('express');
 var router = express.Router();
-const model_paket = require('../models/model_paket.js');
-const model_wisata = require('../models/model_wisata.js');
+const model_paket = require('../models/model_paket');
+const model_wisata = require('../models/model_wisata');
 
-router.get('/',async function(req,res,next){
-    let rows = await model_paket.getAll();
-    res.render('admin/paket',{
-        data:rows
-    });
-})
+// Route untuk menampilkan semua paket
+router.get('/', async function(req, res, next) {
+    try {
+        let rows = await model_paket.getAll();
+        res.render('admin/paket', {
+            data: rows
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        req.flash('error', 'Gagal memuat data paket');
+        res.redirect('/admin');
+    }
+});
 
+// Route untuk menampilkan halaman pembuatan paket
 router.get('/create', async function(req, res, next) {
     try {
-        // Mendapatkan data barang dan data peminjam
-        let rows2 = await model_wisata.getALL();
-
-        // Merender halaman pembuatan paket dengan data yang diperoleh
+        let data_wisata = await model_wisata.getAll();
         res.render('paket/create', {
             id_wisata: '',
             nama_paket: '',
             deskripsi: '',
             harga: '',
-            data_wisata: rows2,
+            data_wisata: data_wisata
         });
     } catch (error) {
-        // Tangani kesalahan
-        console.error('Error saat mendapatkan data barang atau data peminjam:', error);
+        console.error('Error saat mendapatkan data wisata:', error);
         req.flash('error', 'Gagal memuat halaman pembuatan paket');
-        res.redirect('/paket'); // Redirect ke halaman lain atau lakukan hal lain sesuai kebutuhan
+        res.redirect('/paket');
     }
 });
 
-
-
+// Route untuk menyimpan paket baru
 router.post('/store', async function(req, res, next) {
     try {
         let { id_wisata, nama_paket, deskripsi, harga } = req.body;
-        let Data = {
-            id_wisata,
-            nama_paket,
-            deskripsi,
-            harga,
-        }
-        await model_paket.create(Data);
+        let data = { id_wisata, nama_paket, deskripsi, harga };
+        await model_paket.create(data);
         req.flash('success', 'Berhasil menyimpan data');
         res.redirect('/paket');
     } catch (error) {
@@ -52,19 +50,15 @@ router.post('/store', async function(req, res, next) {
     }
 });
 
- 
+// Route untuk menampilkan halaman edit paket
 router.get('/edit/:id', async function(req, res, next) {
     try {
         let id = req.params.id;
-        let rows = await model_paket.getById();
-        let rows2 = await model_wisata.getById();
-        res.render('paket/edit', {
-            id: id,
-            id_wisata: rows[0].id_wisata,
-            nama_paket: rows[0].nama_paket,
-            deskripsi: rows[0].deskripsi,
-            harga: rows[0].harga,
-            data_barang: rows2,
+        let paket = await model_paket.getById(id);
+        let data_wisata = await model_wisata.getAll();
+        res.render('admin/editpaket', {
+            paket: paket,
+            data_wisata: data_wisata
         });
     } catch (error) {
         console.error('Error:', error);
@@ -73,33 +67,35 @@ router.get('/edit/:id', async function(req, res, next) {
     }
 });
 
+// Route untuk memperbarui data paket
 router.post('/update/:id', async function(req, res, next) {
-    try {
-        let id = req.params.id;
-        let { id_wisata, nama_paket, deskripsi, harga } = req.body;
-        let Data = {
-            id_wisata,
-            nama_paket,
-            deskripsi,
-            harga,
-        };
-        await model_paket.update(id, Data);
-        req.flash('success', 'Berhasil update data');
-        res.redirect('/paket');
-    } catch (error) {
-        console.error('Error:', error);
-        req.flash('error', 'Gagal menyimpan data');
-        res.redirect('/paket');
-    }
+  try {
+      let id = req.params.id;
+      let { id_wisata, nama_paket, deskripsi, harga } = req.body;
+      let data = { id_wisata, nama_paket, deskripsi, harga };
+      await model_paket.update(id, data);
+      req.flash('success', 'Berhasil memperbarui data');
+      res.redirect('/paket');
+  } catch (error) {
+      console.error('Error:', error);
+      req.flash('error', 'Gagal memperbarui data');
+      res.redirect(`/paket/edit/${id}`);
+  }
 });
 
 
-
-router.get('/delete/(:id)',async function(req,res,next){
-    let id = req.params.id;
-    await model_paket.remove(id);
-    req.flash('success','Berhasil menghapus data');
-    res.redirect('/paket')
-})
+// Route untuk menghapus paket
+router.get('/delete/:id', async function(req, res, next) {
+    try {
+        let id = req.params.id;
+        await model_paket.remove(id);
+        req.flash('success', 'Berhasil menghapus data');
+        res.redirect('/paket');
+    } catch (error) {
+        console.error('Error:', error);
+        req.flash('error', 'Gagal menghapus data');
+        res.redirect('/paket');
+    }
+});
 
 module.exports = router;

@@ -1,56 +1,99 @@
 var express = require("express");
 var router = express.Router();
-const bcrypt = require("bcrypt");
 const ModelWisata = require('../models/model_wisata');
 const ModelPaket = require('../models/model_paket');
-const model_paket = require("../models/model_paket");
-const model_wisata = require("../models/model_wisata");
-
+const ModelPesan = require('../models/model_pesan');
 
 router.get("/", function (req, res, next) {
   res.render("admin/index");
 });
-router.get("/paket",async function (req, res, next) {
-  let data = await model_paket.getAll();
-  res.render("admin/paket", { data: data });
+
+// Route untuk menampilkan semua paket
+router.get("/paket", async function (req, res, next) {
+  try {
+    let data = await ModelPaket.getAll();
+    res.render("admin/paket", { data: data });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
-router.get("/tambahpaket",async function (req, res, next) {
-  let data_wisata = await model_wisata.getAll();
-  res.render("admin/tambahpaket",{data_wisata: data_wisata});
+router.get("/pesan", async function (req, res, next) {
+  try {
+    let data_pesan = await ModelPesan.getAll();
+    res.render("admin/pesan", { data: data_pesan }); // Meneruskan data pesan ke template ejs
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-router.get("/wisata",async function (req, res, next) {
-  let data = await model_wisata.getAll();
-  res.render('admin/wisata',{ data: data });
+
+// Route untuk menampilkan form tambah paket
+router.get("/tambahpaket", async function (req, res, next) {
+  try {
+    let data_wisata = await ModelWisata.getAll();
+    res.render("admin/tambahpaket", { data_wisata: data_wisata });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
+
+// Route untuk menampilkan form edit paket berdasarkan ID
+router.get("/editpaket/:id", async function (req, res, next) {
+  try {
+    let id = req.params.id;
+    let paket = await ModelPaket.getById(id);
+    let data_wisata = await ModelWisata.getAll();
+    res.render("admin/editpaket", { paket: paket, data_wisata: data_wisata });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Route untuk menampilkan semua objek wisata
+router.get("/wisata", async function (req, res, next) {
+  try {
+    let data = await ModelWisata.getAll();
+    res.render('admin/wisata', { data: data });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Route untuk menampilkan form tambah wisata
 router.get("/tambahwisata", function (req, res, next) {
   res.render("admin/tambahwisata");
 });
-router.get("/editwisata/(:id)", async function (req, res, next) {
+
+// Route untuk menampilkan form edit wisata berdasarkan ID
+router.get("/editwisata/:id", async function (req, res, next) {
   try {
     let id = req.params.id;
-    let rows = await model_wisata.getById(id);
+    let rows = await ModelWisata.getById(id);
     res.render('admin/editwisata', {
-        data: rows,
-        id: rows[0].id_wisata,
-        nama: rows[0].nama,
-        alamat: rows[0].alamat, 
-        deskripsi: rows[0].deskripsi,
-        gambar: rows[0].gambar,
+      data: rows,
+      id: rows[0].id_wisata,
+      nama: rows[0].nama,
+      alamat: rows[0].alamat, 
+      deskripsi: rows[0].deskripsi,
+      gambar: rows[0].gambar,
     });
-} catch (error) {
-    res.redirect('/wisata');
+  } catch (error) {
     console.error(error);
-}
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/pesan", function (req, res, next) {
   res.render("admin/pesan");
 });
+
 router.get("/tambahpesan", function (req, res, next) {
   res.render("admin/tambahpesan");
 });
-
-
 
 module.exports = router;

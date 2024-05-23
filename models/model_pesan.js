@@ -1,14 +1,9 @@
 const connection = require('../config/db');
 
-class model_paket {
+class model_pesan {
   static async getAll() {
     return new Promise((resolve, reject) => {
-      const query = `
-        SELECT p.*, w.nama AS nama_wisata
-        FROM paket p
-        JOIN wisata w ON p.id_wisata = w.id_wisata
-      `;
-      connection.query(query, (err, rows) => {
+      connection.query('SELECT * FROM pesan', (err, rows) => {
         if (err) {
           reject(err);
         } else {
@@ -20,17 +15,11 @@ class model_paket {
 
   static async getById(id) {
     return new Promise((resolve, reject) => {
-      const query = `
-        SELECT p.*, w.nama AS nama_wisata
-        FROM paket p
-        JOIN wisata w ON p.id_wisata = w.id_wisata
-        WHERE p.id_paket = ?
-      `;
-      connection.query(query, [id], (err, rows) => {
+      connection.query('SELECT * FROM pesan WHERE id_pesan = ?', id, (err, rows) => {
         if (err) {
           reject(err);
         } else {
-          resolve(rows[0]);
+          resolve(rows[0]); // Ambil data pertama karena id_pesan adalah primary key
         }
       });
     });
@@ -38,11 +27,11 @@ class model_paket {
 
   static async create(data) {
     return new Promise((resolve, reject) => {
-      connection.query('INSERT INTO paket SET ?', data, (err, result) => {
+      connection.query('INSERT INTO pesan SET ?', data, (err, result) => {
         if (err) {
           reject(err);
         } else {
-          resolve(result.insertId);
+          resolve(result.insertId); // Mengembalikan ID dari data yang baru saja dimasukkan
         }
       });
     });
@@ -50,11 +39,11 @@ class model_paket {
 
   static async update(id, data) {
     return new Promise((resolve, reject) => {
-      connection.query('UPDATE paket SET ? WHERE id_paket = ?', [data, id], (err, result) => {
+      connection.query('UPDATE pesan SET ? WHERE id_pesan = ?', [data, id], (err, result) => {
         if (err) {
           reject(err);
         } else {
-          resolve(result.affectedRows);
+          resolve(result.affectedRows); // Mengembalikan jumlah baris yang terpengaruh oleh perintah UPDATE
         }
       });
     });
@@ -62,15 +51,15 @@ class model_paket {
 
   static async remove(id) {
     return new Promise((resolve, reject) => {
-      connection.query('DELETE FROM paket WHERE id_paket = ?', [id], (err, result) => {
+      connection.query('DELETE FROM pesan WHERE id_pesan = ?', id, (err, result) => {
         if (err) {
           reject(err);
         } else {
-          resolve(result.affectedRows);
+          resolve(result.affectedRows); // Mengembalikan jumlah baris yang terpengaruh oleh perintah DELETE
         }
       });
     });
   }
 }
 
-module.exports = model_paket;
+module.exports = model_pesan;
