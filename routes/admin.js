@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
 const ModelWisata = require('../models/model_wisata');
-const ModelPaket = require('../models/model_paket');
-const ModelPesan = require('../models/model_pesan');
+const model_paket = require("../models/model_paket");
+const model_pesan = require("../models/model_pesan");
 
 router.get("/", function (req, res, next) {
   res.render("admin/index");
@@ -18,22 +18,14 @@ router.get("/paket", async function (req, res, next) {
     res.status(500).send("Internal Server Error");
   }
 });
-router.get("/pesan", async function (req, res, next) {
-  try {
-    let data_pesan = await ModelPesan.getAll();
-    res.render("admin/pesan", { data: data_pesan }); // Meneruskan data pesan ke template ejs
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+
 
 
 // Route untuk menampilkan form tambah paket
 router.get("/tambahpaket", async function (req, res, next) {
   try {
-    let data_wisata = await ModelWisata.getAll();
-    res.render("admin/tambahpaket", { data_wisata: data_wisata });
+    let data_paket = await model_paket.getAll();
+    res.render("admin/tambahpaket", { data_paket: data_paket });
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -88,12 +80,35 @@ router.get("/editwisata/:id", async function (req, res, next) {
   }
 });
 
-router.get("/pesan", function (req, res, next) {
-  res.render("admin/pesan");
+router.get("/pesan", async function (req, res, next) {
+  try {
+    let data_pesan = await ModelPesan.getAll();
+    res.render("admin/pesan", { data_pesan: data_pesan }); // Meneruskan data pesan ke template ejs
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-router.get("/tambahpesan", function (req, res, next) {
-  res.render("admin/tambahpesan");
+router.get("/tambahpesan", async function (req, res, next) {
+  try {
+    let data_paket = await model_paket.getAll();
+    res.render("admin/tambahpesan", { data_paket: data_paket });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
+router.get("/editpesan/:id", async function (req, res, next) {
+  try {
+    let id = req.params.id;
+    let pesan = await model_pesan.getById(id);
+    let data_paket = await model_paket.getAll();
+    res.render("admin/editpesan", { pesan: pesan, data_paket: data_paket });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 module.exports = router;

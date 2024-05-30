@@ -32,8 +32,6 @@
                             <th>ID Pesanan</th>
                             <th>Nama</th>
                             <th>Nama Paket</th>
-                            <th>ID akun</th>
-                            <th>ID Paket</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -42,8 +40,6 @@
                             <tr>
                                 <td><%= data[i].id_pesan %></td>
                                 <td><%= data[i].nama %></td>
-                                <td><%= data[i].nama_paket %></td>
-                                <td><%= data[i].id_akun %></td>
                                 <td><%= data[i].id_paket %></td>
                                 <td class="table-action">
                                     <a href="/pesan/edit/<%= data[i].id_pesan %>" class="action-icon">

@@ -46,28 +46,19 @@
                     <h4 class="page-title">Edit Pesanan</h4>
                     <div class="row">
                         <div class="col-lg-6">
-                            <form action="/paket/update/<%= paket.id_paket %>" method="POST">
+                            <form action="/pesan/update/<%= pesan.id_pesan %>" method="POST">
                                 <div class="mb-3">
-                                    <label for="nama_paket" class="form-label">Nama</label>
-                                    <input type="text" class="form-control" id="nama_paket" name="nama_paket" value="<%= paket.nama_paket %>">
+                                    <label for="nama" class="form-label">Nama</label>
+                                    <input type="text" class="form-control" id="nama" name="nama" value="<%= pesan.nama %>">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="deskripsi" class="form-label">Deskripsi</label>
-                                    <textarea class="form-control" id="deskripsi" name="deskripsi"><%= paket.deskripsi %></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="harga" class="form-label">Harga</label>
-                                    <input type="text" class="form-control" id="harga" name="harga" value="<%= paket.harga %>">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="id_wisata" class="form-label">ID Wisata</label>
-                                    <select name="id_wisata" id="id_wisata" class="form-select" required>
-                                        <% data_wisata.forEach(wisata => { %>
-                                            <option value="<%= wisata.id_wisata %>" <% if (wisata.id_wisata === paket.id_wisata) { %> selected <% } %>><%= wisata.nama %></option>
+                                    <label for="id_paket" class="form-label">paket</label>
+                                    <select name="id_paket" id="id_paket" class="form-select" required>
+                                        <% data_paket.forEach(paket => { %>
+                                            <option value="<%= paket.id_paket %>" <% if (paket.id_paket === pesan.id_paket) { %> selected <% } %>><%= paket.nama_paket %></option>
                                         <% }); %>
                                     </select>
                                 </div>
-                                
                                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             </form>
                         </div>

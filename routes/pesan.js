@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const model_pesan = require('../models/model_pesan');
+const model_paket = require('../models/model_wisata');
 
 // Route untuk menampilkan semua pesan
 router.get('/', async function(req, res, next) {
     try {
         let rows = await model_pesan.getAll();
-        res.render('pesan/index', {
+        res.render('admin/pesan', {
             data: rows
         });
     } catch (error) {
@@ -17,19 +18,27 @@ router.get('/', async function(req, res, next) {
 });
 
 // Route untuk menampilkan form tambah pesan
+// Route untuk menampilkan halaman pembuatan paket
 router.get('/create', async function(req, res, next) {
-    // Di sini Anda dapat menambahkan logika untuk mengambil data yang diperlukan dari model lain jika diperlukan
-    res.render('pesan/create');
+    try {
+        let data_pesan = await model_pesan.getAll();
+        res.render('pesan/create', {
+            nama: '',
+            id_paket: '',
+            data_pesan: data_pesan
+        });
+    } catch (error) {
+        console.error('Error saat mendapatkan data wisata:', error);
+        req.flash('error', 'Gagal memuat halaman pembuatan paket');
+        res.redirect('/paket');
+    }
 });
-
 // Route untuk menambahkan pesan baru
 router.post('/store', async function(req, res, next) {
     try {
-        let { nama, nama_paket, id_akun, id_paket } = req.body;
+        let { nama, id_paket } = req.body;
         let data = {
             nama,
-            nama_paket,
-            id_akun,
             id_paket,
         };
         await model_pesan.create(data);
@@ -47,13 +56,15 @@ router.get('/edit/:id', async function(req, res, next) {
   try {
       let id = req.params.id;
       let pesan = await model_pesan.getById(id);
-      res.render('pesan/edit', {
-          pesan: pesan
+      let data_paket = await model_paket.getAll(id);
+      res.render('admin/editpesan', {
+          pesan: pesan,
+          data_paket: data_paket,
       });
   } catch (error) {
       console.error('Error:', error);
       req.flash('error', 'Gagal memuat halaman edit pesan');
-      res.redirect('/pesan');
+      res.redirect('admin/pesan');
   }
 });
 
@@ -61,11 +72,9 @@ router.get('/edit/:id', async function(req, res, next) {
 router.post('/update/:id', async function(req, res, next) {
     try {
         let id = req.params.id;
-        let { nama, nama_paket, id_akun, id_paket } = req.body;
+        let { nama, id_paket } = req.body;
         let data = {
             nama,
-            nama_paket,
-            id_akun,
             id_paket,
         };
         await model_pesan.update(id, data);
