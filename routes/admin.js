@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const ModelWisata = require('../models/model_wisata');
 const model_paket = require("../models/model_paket");
-const model_pesan = require("../models/model_pesan");
+const ModelPesan = require("../models/model_pesan");
 
 router.get("/", function (req, res, next) {
   res.render("admin/index");
